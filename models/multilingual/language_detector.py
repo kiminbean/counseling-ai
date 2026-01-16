@@ -1,4 +1,3 @@
-```
 """
 다국어 언어 감지 및 문화 컨텍스트 분석 모듈
 Phase 3: 국제화 확장
@@ -647,4 +646,3 @@ if __name__ == "__main__":
         print(f" 커뮤니케이션 스타일: {context.communication_style.value}")
         print(f" 낙인 민감도: {context.stigma_sensitivity}")
         print()
-```

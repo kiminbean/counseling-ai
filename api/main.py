@@ -2,9 +2,10 @@
 Main API Entry Point (Phase 1 + 2 + 3 Integrated)
 """
 from fastapi import FastAPI, Depends
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from api.v3.endpoints import router as v3_router
-# Phase 2 endpoints would be imported here
-# from api.v2.voice_endpoints import router as v2_router
+import os
 
 app = FastAPI(
     title="Counseling AI Platform",
@@ -12,13 +13,15 @@ app = FastAPI(
     version="3.0.0"
 )
 
-# Include Routers
-app.include_router(v3_router)
-# app.include_router(v2_router)
+# Static Files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
-async def root():
-    return {"message": "Welcome to Counseling AI Platform"}
+async def read_index():
+    return FileResponse('static/index.html')
+
+# Include Routers
+app.include_router(v3_router)
 
 @app.get("/health")
 async def health_check():

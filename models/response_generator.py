@@ -1,5 +1,7 @@
-"응답 생성 모델 (Phase 1-3 통합)
-저장 경로: models/response_generator.py"
+"""
+응답 생성 모델 (Phase 1-3 통합)
+저장 경로: models/response_generator.py
+"""
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
 from enum import Enum
@@ -305,7 +307,7 @@ class ResponseGenerator:
             return self._generate_crisis_response(templates, language)
         
         # 감정별 템플릿 가져오기
-        emotion_templates = templates.get(emotion, templates.get("neutral", {{}})
+        emotion_templates = templates.get(emotion, templates.get("neutral", {{}}))
         
         # 공감 표현 선택
         empathy_list = emotion_templates.get("empathy", ["네, 말씀 들었어요."])

@@ -238,24 +238,3 @@ class EmotionClassifier:
             is_crisis=is_crisis,
             crisis_keywords_detected=crisis_keywords
         )
-
-
-# 테스트
-if __name__ == "__main__":
-    classifier = EmotionClassifier()
-    
-    test_texts = [
-        "오늘 너무 힘들고 우울해요",
-        "I'm feeling really anxious about tomorrow",
-        "정말 행복한 하루였어요!",
-        "요즘 죽고 싶다는 생각이 들어요"
-    ]
-    
-    for text in test_texts:
-        result = classifier.predict(text)
-        print(f"\n텍스트: {text}")
-        print(f"  감정: {result.emotion} ({result.confidence:.2f})")
-        print(f"  강도: {result.intensity:.2f}")
-        print(f"  위기: {result.is_crisis}")
-        if result.is_crisis:
-            print(f"  위기 키워드: {result.crisis_keywords_detected}")

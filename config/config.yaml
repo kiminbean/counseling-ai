@@ -1,0 +1,20 @@
+# =============================================================================
+# Phase 1 Configuration - Basic Counseling AI
+# =============================================================================
+app:
+  name: "Counseling AI - Phase 1"
+  version: "1.0.0"
+  env: "development"
+
+models:
+  emotion_classifier:
+    model_name: "monologg/kobert-base-emotion"
+    max_len: 64
+  
+  response_generator:
+    model_name: "skt/kogpt2-base-v2"
+    max_len: 128
+
+server:
+  host: "0.0.0.0"
+  port: 8000

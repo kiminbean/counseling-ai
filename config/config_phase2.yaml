@@ -1,0 +1,12 @@
+# =============================================================================
+# Phase 2 Configuration - Voice & Multimodal
+# =============================================================================
+voice:
+  stt_provider: "google"
+  tts_provider: "google"
+  language: "ko-KR"
+
+multimodal:
+  face_detection:
+    enabled: true
+    min_confidence: 0.5

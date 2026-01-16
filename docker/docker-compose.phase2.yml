@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  counseling-voice:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    environment:
+      - ENABLE_VOICE=true

@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   keywords: ['심리상담', 'AI', '마음건강', '멘탈헬스', '우울', '불안', '스트레스'],
   authors: [{ name: 'MindBridge Team' }],
   manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',

@@ -2,6 +2,7 @@
 
 import { ReactNode, Suspense } from 'react';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { ThemeProvider } from '@/contexts/ThemeContext';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 import { OfflineAlert } from '@/components/common/OfflineAlert';
 import { ToastProvider } from '@/components/common/Toast';
@@ -26,12 +27,14 @@ export function Providers({ children }: ProvidersProps) {
     <ErrorBoundary>
       <ToastProvider>
         <AuthProvider>
-          <Suspense fallback={null}>
-            <PageLoading />
-          </Suspense>
-          <OfflineAlert />
-          {children}
-          <InstallPrompt />
+          <ThemeProvider>
+            <Suspense fallback={null}>
+              <PageLoading />
+            </Suspense>
+            <OfflineAlert />
+            {children}
+            <InstallPrompt />
+          </ThemeProvider>
         </AuthProvider>
       </ToastProvider>
     </ErrorBoundary>

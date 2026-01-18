@@ -1,5 +1,39 @@
 # Project Milestones: MindBridge AI Frontend
 
+## v2.0 Production Complete (Shipped: 2026-01-18)
+
+**Delivered:** 사용자 경험 완성 및 운영 준비 - 미구현 페이지, PWA 아이콘, Sentry 모니터링, E2E 테스트
+
+**Phases completed:** 13-16 (4 phases, 5 plans)
+
+**Key accomplishments:**
+
+1. **다크 모드 지원**: ThemeContext, useTheme 훅, light/dark/system 모드
+2. **설정 페이지**: 테마 설정, 알림 설정, 개인정보 관리 (삭제/내보내기), PWA 설치 안내
+3. **개인정보 처리방침**: 한국어 개인정보 처리방침 (5개 섹션)
+4. **도움말 페이지**: 사용 가이드, FAQ 아코디언, 긴급 연락처
+5. **PWA 아이콘**: 8개 사이즈 (72x72~512x512), Apple Touch Icon, favicon
+6. **Sentry 에러 트래킹**: @sentry/nextjs, 프로덕션 에러 캡처, 선택적 초기화
+7. **E2E 테스트**: Playwright, 56개 테스트 (auth, chat, navigation, pwa)
+8. **CI 워크플로우**: GitHub Actions E2E 테스트 자동화
+
+**Stats:**
+
+- 4 phases, 5 plans, ~17 tasks
+- 24 commits
+- 56 E2E tests + 47 unit tests = 103 total tests
+- 7,583 lines of TypeScript
+- Production build verified
+
+**Tech Stack Added:**
+- Playwright (E2E testing)
+- @sentry/nextjs (error tracking)
+- sharp (icon generation)
+
+**What's next:** v2.1 - Google Analytics 연동, Web Vitals 대시보드, Visual regression 테스트
+
+---
+
 ## v1.2 Production Ready (Shipped: 2026-01-18)
 
 **Delivered:** 상용화 수준의 한국어 AI 심리상담 챗봇 프론트엔드 완성

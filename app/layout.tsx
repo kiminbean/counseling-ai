@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from '@/components/providers/Providers'
+import { SkipLink } from '@/components/common/SkipLink'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -35,8 +36,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${inter.className} antialiased`}>
+        <SkipLink />
         <Providers>
-          {children}
+          <main id="main-content" tabIndex={-1} className="outline-none">
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

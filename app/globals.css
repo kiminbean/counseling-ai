@@ -77,6 +77,17 @@ body {
   }
 }
 
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 /* Tailwind CSS animation utilities */
 @layer utilities {
   .animate-in {
@@ -91,6 +102,10 @@ body {
 
   .slide-in-from-bottom-2 {
     animation-name: slideInFromBottom;
+  }
+
+  .animate-slide-in {
+    animation: slideIn 0.3s ease-out;
   }
 
   /* Hide scrollbar but keep functionality */

@@ -3,6 +3,7 @@
 import { Component, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import Link from 'next/link';
+import { captureError } from '@/lib/monitoring';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -29,13 +30,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // Production에서는 에러 모니터링 서비스로 전송
-    if (process.env.NODE_ENV === 'production') {
-      // TODO: Sentry 등 에러 모니터링 서비스 연동
-      // Sentry.captureException(error, { extra: errorInfo });
-    } else {
-      console.error('ErrorBoundary caught an error:', error, errorInfo);
-    }
+    // 에러 모니터링 서비스로 전송
+    captureError(error, {
+      page: typeof window !== 'undefined' ? window.location.pathname : undefined,
+      action: 'component_error',
+      extra: {
+        componentStack: errorInfo.componentStack,
+      },
+    });
   }
 
   handleRetry = () => {

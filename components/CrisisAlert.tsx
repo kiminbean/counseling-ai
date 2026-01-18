@@ -7,6 +7,7 @@
 'use client';
 
 import { Phone, X, Heart, ExternalLink } from 'lucide-react';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface CrisisAlertProps {
   isOpen: boolean;
@@ -77,35 +78,51 @@ const MESSAGES = {
 };
 
 export function CrisisAlert({ isOpen, onClose, language = 'ko' }: CrisisAlertProps) {
+  const modalRef = useFocusTrap<HTMLDivElement>({
+    isActive: isOpen,
+    onEscape: onClose,
+  });
+
   if (!isOpen) return null;
 
   const hotlines = HOTLINES[language] || HOTLINES.en;
   const messages = MESSAGES[language as keyof typeof MESSAGES] || MESSAGES.en;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="crisis-alert-title"
+      aria-describedby="crisis-alert-description"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Modal */}
-      <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div
+        ref={modalRef}
+        className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in duration-200"
+      >
         {/* Header */}
         <div className="bg-gradient-to-r from-rose-500 to-pink-500 p-6 text-white">
           <button
             onClick={onClose}
+            aria-label="닫기"
             className="absolute top-4 right-4 p-1 rounded-full hover:bg-white/20 transition-colors"
           >
-            <X size={20} />
+            <X size={20} aria-hidden="true" />
           </button>
 
           <div className="flex items-center gap-3 mb-3">
-            <Heart className="w-8 h-8" fill="currentColor" />
-            <h2 className="text-xl font-bold">{messages.title}</h2>
+            <Heart className="w-8 h-8" fill="currentColor" aria-hidden="true" />
+            <h2 id="crisis-alert-title" className="text-xl font-bold">{messages.title}</h2>
           </div>
-          <p className="text-white/90 text-sm">{messages.subtitle}</p>
+          <p id="crisis-alert-description" className="text-white/90 text-sm">{messages.subtitle}</p>
         </div>
 
         {/* Content */}
@@ -127,9 +144,10 @@ export function CrisisAlert({ isOpen, onClose, language = 'ko' }: CrisisAlertPro
                 </div>
                 <a
                   href={`tel:${hotline.number.replace(/\s+/g, '')}`}
+                  aria-label={`${hotline.name}에 전화하기: ${hotline.number}`}
                   className="flex items-center gap-2 bg-rose-500 text-white px-4 py-2 rounded-lg hover:bg-rose-600 transition-colors"
                 >
-                  <Phone size={16} />
+                  <Phone size={16} aria-hidden="true" />
                   <span className="font-medium">{hotline.number}</span>
                 </a>
               </div>
@@ -149,10 +167,11 @@ export function CrisisAlert({ isOpen, onClose, language = 'ko' }: CrisisAlertPro
                       href={hotline.url}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`${hotline.name} 웹사이트 (새 탭에서 열림)`}
                       className="text-xs text-brand-600 hover:text-brand-700 flex items-center gap-1"
                     >
                       {hotline.name}
-                      <ExternalLink size={10} />
+                      <ExternalLink size={10} aria-hidden="true" />
                     </a>
                   ))}
               </div>

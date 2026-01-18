@@ -58,13 +58,18 @@ export function ChatInput({
           type="button"
           className="p-3 text-gray-400 hover:text-brand-500 hover:bg-brand-50 rounded-xl transition-colors hidden sm:flex"
           title="대화 제안"
+          aria-label="AI 대화 제안 보기"
         >
-          <Sparkles size={20} />
+          <Sparkles size={20} aria-hidden="true" />
         </button>
 
         {/* 입력 필드 */}
         <div className="flex-1 relative">
+          <label htmlFor="chat-input" className="sr-only">
+            상담 메시지 입력
+          </label>
           <textarea
+            id="chat-input"
             ref={textareaRef}
             value={value}
             onChange={handleChange}
@@ -72,6 +77,8 @@ export function ChatInput({
             placeholder={placeholder}
             disabled={isLoading || disabled}
             rows={1}
+            aria-label="상담 메시지 입력"
+            aria-describedby="chat-input-hint"
             className={`
               w-full px-4 py-3
               bg-gray-50 border border-gray-200 rounded-2xl
@@ -82,6 +89,9 @@ export function ChatInput({
               ${(isLoading || disabled) ? 'opacity-60 cursor-not-allowed' : ''}
             `}
           />
+          <span id="chat-input-hint" className="sr-only">
+            Enter 키로 전송, Shift+Enter로 줄바꿈
+          </span>
         </div>
 
         {/* 전송 버튼 */}
@@ -89,6 +99,7 @@ export function ChatInput({
           type="button"
           onClick={handleSend}
           disabled={!canSend}
+          aria-label="메시지 전송"
           className={`
             p-3 rounded-xl transition-all duration-200
             ${canSend
@@ -97,7 +108,7 @@ export function ChatInput({
             }
           `}
         >
-          <Send size={20} />
+          <Send size={20} aria-hidden="true" />
         </button>
       </div>
 

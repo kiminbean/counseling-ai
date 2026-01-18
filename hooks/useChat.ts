@@ -1,15 +1,19 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { sendMessage as sendMessageApi, getErrorMessage } from '@/lib/api';
 import { Message, EmotionData } from '@/types';
+import { debounce, safeJsonParse } from '@/lib/utils';
 
 // 고유 ID 생성
 const generateId = () => `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
 // 저장할 최대 메시지 수
 const MAX_STORED_MESSAGES = 50;
+
+// localStorage 저장 딜레이 (ms)
+const STORAGE_DEBOUNCE_MS = 1000;
 
 interface UseChatReturn {
   messages: Message[];
@@ -39,7 +43,18 @@ export function useChat(): UseChatReturn {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // localStorage에서 세션 복원
+  // Debounced 저장 함수 (메모이제이션)
+  const debouncedSaveMessages = useMemo(
+    () =>
+      debounce((msgs: Message[]) => {
+        if (typeof window === 'undefined') return;
+        const messagesToStore = msgs.slice(-MAX_STORED_MESSAGES);
+        localStorage.setItem('current_messages', JSON.stringify(messagesToStore));
+      }, STORAGE_DEBOUNCE_MS),
+    []
+  );
+
+  // localStorage에서 세션 복원 (초기 로드 시 1회만)
   useEffect(() => {
     if (typeof window === 'undefined' || authLoading) return;
 
@@ -51,29 +66,25 @@ export function useChat(): UseChatReturn {
     }
 
     if (storedMessages) {
-      try {
-        const parsed = JSON.parse(storedMessages) as Message[];
+      const parsed = safeJsonParse<Message[]>(storedMessages, []);
+      if (parsed.length > 0) {
         setMessages(parsed);
-      } catch (e) {
-        console.error('Failed to parse stored messages:', e);
       }
     }
   }, [authLoading]);
 
-  // 세션 영속화
+  // 세션 ID 저장 (즉시)
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || !sessionId) return;
+    localStorage.setItem('current_session_id', sessionId);
+  }, [sessionId]);
 
-    if (sessionId) {
-      localStorage.setItem('current_session_id', sessionId);
-    }
-
+  // 메시지 저장 (debounced)
+  useEffect(() => {
     if (messages.length > 0) {
-      // 최근 메시지만 저장
-      const messagesToStore = messages.slice(-MAX_STORED_MESSAGES);
-      localStorage.setItem('current_messages', JSON.stringify(messagesToStore));
+      debouncedSaveMessages(messages);
     }
-  }, [sessionId, messages]);
+  }, [messages, debouncedSaveMessages]);
 
   // 스크롤 자동 이동
   useEffect(() => {

@@ -1,0 +1,20 @@
+{
+  "project": {
+    "name": "MindBridge AI Frontend",
+    "type": "frontend",
+    "framework": "next.js",
+    "language": "typescript"
+  },
+  "initialized": "2026-01-18",
+  "currentMilestone": 1,
+  "currentPhase": 7,
+  "status": "in_progress",
+  "codebaseMapped": true,
+  "planApproved": true,
+  "paths": {
+    "project": ".planning/PROJECT.md",
+    "state": ".planning/STATE.md",
+    "codebase": ".planning/codebase/",
+    "roadmap": ".planning/ROADMAP.md"
+  }
+}

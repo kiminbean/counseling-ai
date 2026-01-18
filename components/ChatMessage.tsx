@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { AlertTriangle } from 'lucide-react';
 import { Avatar } from '@/components/common/Avatar';
 import { EmotionBadge } from '@/components/chat/EmotionBadge';
@@ -23,6 +23,15 @@ export const ChatMessage = memo<ChatMessageProps>(function ChatMessage({
   isTyping
 }) {
   const isUser = role === 'user';
+
+  // 시간 포맷팅 메모이제이션
+  const formattedTime = useMemo(() => {
+    if (!timestamp) return null;
+    return new Date(timestamp).toLocaleTimeString('ko-KR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }, [timestamp]);
 
   return (
     <div
@@ -54,8 +63,11 @@ export const ChatMessage = memo<ChatMessageProps>(function ChatMessage({
         >
           {/* Crisis Warning */}
           {isCrisis && !isUser && (
-            <div className="flex items-center gap-2 text-rose-600 text-sm font-semibold mb-2 pb-2 border-b border-rose-100">
-              <AlertTriangle size={16} />
+            <div
+              role="alert"
+              className="flex items-center gap-2 text-rose-600 text-sm font-semibold mb-2 pb-2 border-b border-rose-100"
+            >
+              <AlertTriangle size={16} aria-hidden="true" />
               도움이 필요하신 것 같아요
             </div>
           )}
@@ -90,13 +102,13 @@ export const ChatMessage = memo<ChatMessageProps>(function ChatMessage({
           {emotion && !isUser && <EmotionBadge emotion={emotion} />}
 
           {/* Timestamp */}
-          {timestamp && (
-            <span className="text-xs text-gray-400">
-              {new Date(timestamp).toLocaleTimeString('ko-KR', {
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-            </span>
+          {formattedTime && (
+            <time
+              dateTime={timestamp ? new Date(timestamp).toISOString() : undefined}
+              className="text-xs text-gray-400"
+            >
+              {formattedTime}
+            </time>
           )}
         </div>
       </div>

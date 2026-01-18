@@ -15,21 +15,27 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 lg:hidden safe-area-bottom">
-      <div className="flex justify-around items-center h-16">
+    <nav
+      aria-label="메인 네비게이션"
+      className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 lg:hidden safe-area-bottom"
+    >
+      <div className="flex justify-around items-center h-16" role="menubar">
         {navItems.map(({ href, icon: Icon, label }) => {
           const isActive = pathname === href;
           return (
             <Link
               key={href}
               href={href}
+              role="menuitem"
+              aria-label={label}
+              aria-current={isActive ? 'page' : undefined}
               className={`flex flex-col items-center justify-center w-full h-full transition-colors ${
                 isActive
                   ? 'text-brand-600'
                   : 'text-gray-400 hover:text-gray-600'
               }`}
             >
-              <Icon size={24} strokeWidth={isActive ? 2.5 : 1.5} />
+              <Icon size={24} strokeWidth={isActive ? 2.5 : 1.5} aria-hidden="true" />
               <span className={`text-xs mt-1 ${isActive ? 'font-semibold' : 'font-medium'}`}>
                 {label}
               </span>

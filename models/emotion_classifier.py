@@ -49,17 +49,59 @@ class EmotionClassifier:
     학습된 모델이 있으면 로드하고, 없으면 규칙 기반으로 동작합니다.
     """
     
-    # KOTE 43개 라벨 -> 앱 내부 12개 라벨 매핑 (단순화된 매핑)
+    # KOTE 44개 라벨 -> 앱 내부 12개 라벨 매핑
+    # 참조: data/README.md의 KOTE 라벨 정의
+    # ['불평/불만', '환영/호의', '감동/감탄', '지긋지긋', '고마움', '슬픔', '화남/분노', '존경',
+    #  '기대감', '우쭐댐/무시함', '안타까움/실망', '비장함', '의심/불신', '뿌듯함', '편안/쾌적',
+    #  '신기함/관심', '아껴주는', '부끄러움', '공포/무서움', '절망', '한심함', '역겨움/징그러움',
+    #  '짜증', '어이없음', '없음', '패배/자기혐오', '귀찮음', '힘듦/지침', '즐거움/신남', '깨달음',
+    #  '죄책감', '증오/혐오', '흐뭇함(귀여움/예쁨)', '당황/난처', '경악', '부담/안_내킴', '서러움',
+    #  '재미없음', '불쌍함/연민', '놀람', '행복', '불안/걱정', '기쁨', '안심/신뢰']
     KOTE_MAPPING = {
-        0: "anger", 1: "sadness", 2: "anxiety", 3: "sadness", 4: "shame", 
-        5: "happiness", 6: "neutral", 7: "disgust", 8: "hope", 9: "anger",
-        10: "sadness", 11: "hope", 12: "anxiety", 13: "happiness", 14: "happiness",
-        15: "surprise", 16: "happiness", 17: "neutral", 18: "fear", 19: "sadness",
-        20: "disgust", 21: "disgust", 22: "anger", 23: "neutral", 24: "neutral",
-        25: "shame", 26: "neutral", 27: "sadness", 28: "happiness", 29: "neutral",
-        30: "guilt", 31: "disgust", 32: "happiness", 33: "shame", 34: "surprise",
-        35: "shame", 36: "sadness", 37: "sadness", 38: "happiness", 39: "anxiety",
-        40: "surprise", 41: "happiness", 42: "happiness", 43: "anger" 
+        0: "anger",       # 불평/불만
+        1: "happiness",   # 환영/호의
+        2: "happiness",   # 감동/감탄
+        3: "disgust",     # 지긋지긋
+        4: "happiness",   # 고마움
+        5: "sadness",     # 슬픔 ★
+        6: "anger",       # 화남/분노 ★
+        7: "hope",        # 존경
+        8: "hope",        # 기대감
+        9: "anger",       # 우쭐댐/무시함
+        10: "sadness",    # 안타까움/실망
+        11: "hope",       # 비장함
+        12: "anxiety",    # 의심/불신
+        13: "happiness",  # 뿌듯함
+        14: "happiness",  # 편안/쾌적
+        15: "surprise",   # 신기함/관심
+        16: "happiness",  # 아껴주는
+        17: "shame",      # 부끄러움
+        18: "fear",       # 공포/무서움
+        19: "sadness",    # 절망
+        20: "disgust",    # 한심함
+        21: "disgust",    # 역겨움/징그러움
+        22: "anger",      # 짜증
+        23: "anger",      # 어이없음
+        24: "neutral",    # 없음
+        25: "sadness",    # 패배/자기혐오
+        26: "anger",      # 귀찮음
+        27: "sadness",    # 힘듦/지침 ★
+        28: "happiness",  # 즐거움/신남
+        29: "neutral",    # 깨달음
+        30: "guilt",      # 죄책감
+        31: "anger",      # 증오/혐오
+        32: "happiness",  # 흐뭇함(귀여움/예쁨)
+        33: "anxiety",    # 당황/난처
+        34: "fear",       # 경악
+        35: "anxiety",    # 부담/안_내킴
+        36: "sadness",    # 서러움
+        37: "sadness",    # 재미없음
+        38: "sadness",    # 불쌍함/연민
+        39: "surprise",   # 놀람
+        40: "happiness",  # 행복 ★
+        41: "anxiety",    # 불안/걱정
+        42: "happiness",  # 기쁨
+        43: "happiness",  # 안심/신뢰
     }
 
     def __init__(self, config: Dict = None):
@@ -98,7 +140,7 @@ class EmotionClassifier:
         self.emotion_keywords = {
             "ko": {
                 "happiness": ["행복", "좋아", "기뻐", "즐거", "신나", "감사", "사랑"],
-                "sadness": ["슬프", "우울", "힘들", "눈물", "외로", "쓸쓸", "허전"],
+                "sadness": ["슬프", "우울", "힘들", "눈물", "외로", "쓸쓸", "허전", "아프", "아파", "고통", "괴로"],
                 "anger": ["화나", "짜증", "분노", "열받", "빡치", "싫어", "미워"],
                 "fear": ["무서", "두려", "겁나", "떨려", "공포"],
                 "anxiety": ["불안", "걱정", "초조", "조마조마", "긴장"],
@@ -115,8 +157,8 @@ class EmotionClassifier:
     def _init_crisis_keywords(self):
         """위기 키워드 초기화"""
         self.crisis_keywords = {
-            "ko": ["죽고 싶", "자살", "자해", "죽을", "끝내고 싶"],
-            "en": ["kill myself", "suicide", "self-harm"]
+            "ko": ["죽고 싶", "자살", "자해", "죽을", "끝내고 싶", "살고 싶지 않", "죽어버리", "목숨"],
+            "en": ["kill myself", "suicide", "self-harm", "end my life", "don't want to live"]
         }
     
     def detect_language(self, text: str) -> str:
@@ -171,6 +213,22 @@ class EmotionClassifier:
                 # Create simplified probability dict
                 probabilities = {self.KOTE_MAPPING.get(i, "neutral"): float(p) for i, p in enumerate(probs)}
                 
+                # 키워드 기반 검증: 모델 예측이 키워드와 충돌하면 보정
+                keywords = self.emotion_keywords.get(language, self.emotion_keywords.get("ko", {}))
+                keyword_emotion = None
+                for emotion, kws in keywords.items():
+                    for kw in kws:
+                        if kw in text:
+                            keyword_emotion = emotion
+                            break
+                    if keyword_emotion:
+                        break
+
+                # 모델이 happiness인데 부정적 키워드가 있으면 보정
+                if predicted_emotion == "happiness" and keyword_emotion in ["sadness", "anger", "fear", "anxiety"]:
+                    predicted_emotion = keyword_emotion
+                    confidence = max(0.6, confidence * 0.8)
+
                 return EmotionResult(
                     emotion=predicted_emotion,
                     confidence=confidence,
@@ -180,7 +238,7 @@ class EmotionClassifier:
                     is_crisis=is_crisis,
                     crisis_keywords_detected=crisis_keywords
                 )
-                
+
             except Exception as e:
                 print(f"Model prediction failed: {e}. Falling back to rules.")
 

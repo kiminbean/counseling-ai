@@ -307,7 +307,7 @@ class ResponseGenerator:
             return self._generate_crisis_response(templates, language)
         
         # 감정별 템플릿 가져오기
-        emotion_templates = templates.get(emotion, templates.get("neutral", {{}}))
+        emotion_templates = templates.get(emotion, templates.get("neutral", {}))
         
         # 공감 표현 선택
         empathy_list = emotion_templates.get("empathy", ["네, 말씀 들었어요."])

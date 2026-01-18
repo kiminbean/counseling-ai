@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Sun, Moon, Monitor, Bell, BellOff, Volume2, VolumeX, Trash2, Download, Smartphone, Info, ChevronLeft } from 'lucide-react';
+import { Sun, Moon, Monitor, Bell, BellOff, Volume2, VolumeX, Trash2, Download, Smartphone, Info, ChevronLeft, ChevronRight, Shield, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
 import { AppShell } from '@/components/layout/AppShell';
 import { useTheme } from '@/hooks';
@@ -278,6 +278,38 @@ export default function SettingsPage() {
                   v{APP_CONFIG.version}
                 </span>
               </div>
+
+              {/* 개인정보처리방침 */}
+              <Link
+                href="/privacy"
+                className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
+                  resolvedTheme === 'dark'
+                    ? 'bg-gray-700 hover:bg-gray-600'
+                    : 'bg-gray-50 hover:bg-gray-100'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Shield size={20} className="text-brand-500" />
+                  <span className={resolvedTheme === 'dark' ? 'text-white' : 'text-gray-900'}>개인정보처리방침</span>
+                </div>
+                <ChevronRight size={20} className={resolvedTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'} />
+              </Link>
+
+              {/* 도움말 */}
+              <Link
+                href="/help"
+                className={`flex items-center justify-between p-4 rounded-xl transition-colors ${
+                  resolvedTheme === 'dark'
+                    ? 'bg-gray-700 hover:bg-gray-600'
+                    : 'bg-gray-50 hover:bg-gray-100'
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <HelpCircle size={20} className="text-brand-500" />
+                  <span className={resolvedTheme === 'dark' ? 'text-white' : 'text-gray-900'}>도움말</span>
+                </div>
+                <ChevronRight size={20} className={resolvedTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'} />
+              </Link>
 
               {/* PWA 설치 */}
               {!isInstalled && (

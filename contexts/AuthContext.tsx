@@ -76,11 +76,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // 익명 토큰 획득 시도
+    // 로컬 userId로 즉시 인증 완료 (백엔드 없이 작동)
+    const deviceId = getOrCreateDeviceId();
+    const userId = getOrCreateUserId();
+
+    // 익명 토큰 획득 시도 (실패해도 계속 진행)
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
-      const deviceId = getOrCreateDeviceId();
-      const userId = getOrCreateUserId();
 
       const response = await fetch(`${API_BASE_URL}/api/v3/auth/anonymous`, {
         method: 'POST',
@@ -118,32 +120,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           anonymousId: data.anonymous_id || null,
           accessToken: data.access_token || null,
         });
-      } else {
-        // 인증 서버 오류 시에도 userId는 유지
-        if (process.env.NODE_ENV !== 'production') {
-          console.warn('Anonymous auth failed, continuing without token');
-        }
-        setState({
-          isAuthenticated: false,
-          isLoading: false,
-          userId: userId,
-          anonymousId: null,
-          accessToken: null,
-        });
+        return;
       }
     } catch (error) {
+      // 백엔드 오류는 무시하고 로컬 모드로 진행
       if (process.env.NODE_ENV !== 'production') {
-        console.error('Auth initialization failed:', error);
+        console.warn('Auth server unavailable, running in local mode');
       }
-      const userId = getOrCreateUserId();
-      setState({
-        isAuthenticated: false,
-        isLoading: false,
-        userId: userId,
-        anonymousId: null,
-        accessToken: null,
-      });
     }
+
+    // 백엔드 없이 로컬 모드로 작동
+    setState({
+      isAuthenticated: true, // 로컬 모드에서도 인증된 것으로 처리
+      isLoading: false,
+      userId: userId,
+      anonymousId: deviceId,
+      accessToken: null,
+    });
   }, []);
 
   const logout = useCallback(() => {

@@ -35,6 +35,7 @@ export const ChatMessage = memo<ChatMessageProps>(function ChatMessage({
 
   return (
     <div
+      data-testid={isUser ? 'user-message' : 'ai-message'}
       className={`
         flex w-full mb-4 animate-in fade-in slide-in-from-bottom-2 duration-300
         ${isUser ? 'justify-end' : 'justify-start'}

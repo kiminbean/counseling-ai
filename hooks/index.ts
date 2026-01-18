@@ -4,3 +4,4 @@ export { useMediaQuery, useIsMobile, useIsTablet, useIsDesktop } from './useMedi
 export { useOnlineStatus } from './useOnlineStatus';
 export { useFocusTrap } from './useFocusTrap';
 export { usePWA } from './usePWA';
+export { useTheme } from './useTheme';

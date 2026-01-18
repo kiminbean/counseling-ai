@@ -11,15 +11,17 @@
 | 핵심 가치 | 안정성 + 보안 (특히 에러 처리) |
 | 대상 사용자 | 한국어 사용자 (심리상담 필요) |
 
-## Current State (v1.2)
+## Current State (v2.0)
 
 **Shipped:** 2026-01-18
 
 | Metric | Value |
 |--------|-------|
-| TypeScript Files | 47 |
-| Lines of Code | 5,618 |
-| Tests | 47 passing |
+| TypeScript Files | 60+ |
+| Lines of Code | 7,583 |
+| Unit Tests | 47 passing |
+| E2E Tests | 56 passing |
+| Total Tests | 103 |
 | Build | Production ready |
 
 ## Tech Stack
@@ -28,7 +30,8 @@
 - **Language**: TypeScript (strict mode)
 - **Styling**: Tailwind CSS
 - **Icons**: Lucide React
-- **Testing**: Vitest + React Testing Library
+- **Testing**: Vitest + React Testing Library + Playwright (E2E)
+- **Monitoring**: Sentry (error tracking)
 - **Backend**: FastAPI (port 8000)
 
 ## Core Features
@@ -74,17 +77,26 @@
 - ✓ PWA 지원 (Service Worker, manifest) — v1.2
 - ✓ 모니터링 준비 (captureError, metrics) — v1.2
 
-### Active (v2.0)
+### Validated (v2.0)
 
-- [ ] /settings 페이지 구현
-- [ ] /privacy 페이지 구현
-- [ ] /help 페이지 구현
-- [ ] PWA 아이콘 생성 (72x72 ~ 512x512)
-- [ ] Sentry 연동 (에러 트래킹)
-- [ ] E2E 테스트 (Playwright)
-- [ ] 다크 모드 지원
+- ✓ /settings 페이지 구현 (테마, 알림, 개인정보 관리) — v2.0
+- ✓ /privacy 페이지 구현 (한국어 개인정보 처리방침) — v2.0
+- ✓ /help 페이지 구현 (FAQ 아코디언, 긴급 연락처) — v2.0
+- ✓ PWA 아이콘 생성 (8개 사이즈, Apple Touch, favicon) — v2.0
+- ✓ Sentry 연동 (선택적 초기화, DSN 없으면 폴백) — v2.0
+- ✓ E2E 테스트 (Playwright 56개 테스트) — v2.0
+- ✓ 다크 모드 지원 (ThemeContext, light/dark/system) — v2.0
+- ✓ GitHub Actions CI (E2E 자동화) — v2.0
 
-### Out of Scope (v1 범위 외)
+### Active (v2.1 - Future)
+
+- [ ] Google Analytics 연동
+- [ ] Web Vitals 대시보드
+- [ ] Visual regression 테스트
+- [ ] 푸시 알림 구현 (현재 UI만 존재)
+- [ ] 앱 스토어 메타데이터 작성
+
+### Out of Scope (v1/v2 범위 외)
 
 - 다국어 지원 (한국어 전용)
 - 실시간 알림 (Push)
@@ -101,6 +113,9 @@
 | Sentry 선택적 의존성 | 개발 환경에서 불필요한 의존성 제거 | ✓ Good |
 | PWA 지원 | 모바일 앱 느낌, 오프라인 지원 | ✓ Good |
 | Vitest 테스트 | Jest보다 빠른 실행 속도 | ✓ Good |
+| Tailwind darkMode: 'class' | HTML 클래스 기반 다크모드, SSR 호환 | ✓ Good |
+| sharp로 아이콘 생성 | 프로그래매틱 아이콘 생성, 재현 가능 | ✓ Good |
+| Playwright E2E | Cypress보다 빠르고 Next.js 통합 좋음 | ✓ Good |
 
 ## Key Constraints
 
@@ -131,4 +146,4 @@ lib/                    # 유틸리티 (api, constants, security, monitoring, ut
 ```
 
 ---
-*Last updated: 2026-01-18 after v1.2 milestone*
+*Last updated: 2026-01-18 after v2.0 milestone*

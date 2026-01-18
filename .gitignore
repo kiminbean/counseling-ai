@@ -129,3 +129,10 @@ dmypy.json
 models/weights/
 logs/
 tmp/
+
+# Node.js
+node_modules/
+
+# Next.js
+.next/
+out/

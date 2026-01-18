@@ -7,46 +7,46 @@
 See: .planning/PROJECT.md (updated 2026-01-18)
 
 **Core value:** 안정성 + 보안 (특히 에러 처리)
-**Current focus:** v2.1 Analytics & Engagement
+**Current focus:** v2.1 Analytics & Engagement COMPLETE
 
-## Current Status: v2.1 In Progress
+## Current Status: v2.1 Complete
 
 | Milestone | Phases | Status |
 |-----------|--------|--------|
 | v1.2 Production Ready | 1-12 | ✅ Shipped |
 | v2.0 Production Complete | 13-16 | ✅ Shipped |
-| v2.1 Analytics & Engagement | 17-21 | 🚧 In Progress |
+| v2.1 Analytics & Engagement | 17-21 | ✅ Complete |
 
 ## Current Position
 
-Phase: 17 of 21 (analytics-setup)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-01-18 — Milestone v2.1 created
+Phase: 21 of 21 (push-frontend)
+Plan: 21-01 COMPLETE
+Status: v2.1 Milestone Complete
+Last activity: 2026-01-18 — All phases (17-21) executed
 
-Progress: [░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 0%
+Progress: [████████████████████████████████] 100%
 
 ---
 
-## v2.1 Phases
+## v2.1 Phases (COMPLETE)
 
 | Phase | Name | Goal | Status |
 |-------|------|------|--------|
-| 17 | analytics-setup | Google Analytics 4 연동 | Not started |
-| 18 | web-vitals | Web Vitals 수집 및 대시보드 | Not started |
-| 19 | visual-testing | Visual regression 테스트 | Not started |
-| 20 | push-backend | FCM/APNs 서버 연동 | Not started |
-| 21 | push-frontend | Service Worker 푸시 핸들링 | Not started |
+| 17 | analytics-setup | Google Analytics 4 연동 | ✅ Complete |
+| 18 | web-vitals | Web Vitals 수집 및 대시보드 | ✅ Complete |
+| 19 | visual-testing | Visual regression 테스트 | ✅ Complete |
+| 20 | push-backend | FCM/APNs 클라이언트 연동 | ✅ Complete |
+| 21 | push-frontend | Service Worker 푸시 핸들링 | ✅ Complete |
 
-### Research Flags
+### Implementation Summary
 
-| Phase | Research | Topics |
-|-------|----------|--------|
-| 17 | Likely | GA4 API, gtag.js, Next.js 통합 |
-| 18 | Likely | web-vitals library, Vercel Analytics |
-| 19 | Likely | Percy, Chromatic, Playwright visual |
-| 20 | Likely | Firebase Cloud Messaging, APNs |
-| 21 | Unlikely | 기존 Service Worker 확장 |
+| Phase | Key Deliverables |
+|-------|------------------|
+| 17 | lib/analytics.ts, AnalyticsProvider, ANALYTICS_EVENTS 상수 |
+| 18 | lib/webVitals.ts, WebVitalsReporter (LCP/INP/CLS/FCP/TTFB) |
+| 19 | e2e/visual.spec.ts (17개 테스트), playwright.config.ts 확장 |
+| 20 | lib/pushNotifications.ts, hooks/usePushNotifications.ts |
+| 21 | firebase-messaging-sw.js, PushNotificationButton, 설정 페이지 통합 |
 
 ---
 

@@ -13,16 +13,20 @@
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "test:visual": "playwright test visual.spec.ts",
+    "test:visual:update": "playwright test visual.spec.ts --update-snapshots"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.34.0",
     "clsx": "^2.1.0",
+    "firebase": "^12.8.0",
     "lucide-react": "^0.309.0",
     "next": "14.1.0",
     "react": "^18",
     "react-dom": "^18",
-    "tailwind-merge": "^2.2.0"
+    "tailwind-merge": "^2.2.0",
+    "web-vitals": "^5.1.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.57.0",

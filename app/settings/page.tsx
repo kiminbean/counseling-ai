@@ -7,6 +7,8 @@ import { AppShell } from '@/components/layout/AppShell';
 import { useTheme } from '@/hooks';
 import { usePWA } from '@/hooks';
 import { useLocalStorage } from '@/hooks';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
+import { PushNotificationButton } from '@/components/common/PushNotificationButton';
 import { APP_CONFIG } from '@/lib/constants';
 
 type NotificationSettings = {
@@ -24,6 +26,7 @@ type NotificationSettings = {
 export default function SettingsPage() {
   const { theme, setTheme, resolvedTheme } = useTheme();
   const { isInstallable, isInstalled, promptInstall, isIOS } = usePWA();
+  const { isSupported: isPushSupported, permission: pushPermission } = usePushNotifications();
   const [notifications, setNotifications] = useLocalStorage<NotificationSettings>('notification_settings', {
     push: true,
     sound: true,
@@ -137,7 +140,44 @@ export default function SettingsPage() {
               알림 설정
             </h2>
             <div className="space-y-4">
-              {/* Push 알림 */}
+              {/* 브라우저 푸시 알림 (실제 권한 요청) */}
+              {isPushSupported && (
+                <div className={`p-4 rounded-xl ${resolvedTheme === 'dark' ? 'bg-gray-700' : 'bg-gray-50'}`}>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      {pushPermission === 'granted' ? (
+                        <Bell size={20} className="text-green-500" />
+                      ) : pushPermission === 'denied' ? (
+                        <BellOff size={20} className="text-red-500" />
+                      ) : (
+                        <Bell size={20} className="text-brand-500" />
+                      )}
+                      <div>
+                        <p className={`font-medium ${resolvedTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                          브라우저 푸시 알림
+                        </p>
+                        <p className={`text-sm ${resolvedTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
+                          앱이 꺼져있어도 알림 수신
+                        </p>
+                      </div>
+                    </div>
+                    <PushNotificationButton compact={false} />
+                  </div>
+                  {/* 권한 상태 안내 메시지 */}
+                  {pushPermission === 'denied' && (
+                    <p className={`text-sm mt-2 ${resolvedTheme === 'dark' ? 'text-red-400' : 'text-red-600'}`}>
+                      브라우저 설정에서 알림 권한을 허용해주세요.
+                    </p>
+                  )}
+                  {pushPermission === 'granted' && (
+                    <p className={`text-sm mt-2 ${resolvedTheme === 'dark' ? 'text-green-400' : 'text-green-600'}`}>
+                      푸시 알림이 활성화되었습니다.
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* 인앱 알림 (localStorage 기반) */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {notifications.push ? (
@@ -147,10 +187,10 @@ export default function SettingsPage() {
                   )}
                   <div>
                     <p className={`font-medium ${resolvedTheme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      푸시 알림
+                      인앱 알림
                     </p>
                     <p className={`text-sm ${resolvedTheme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                      상담 알림 및 리마인더
+                      상담 알림 및 리마인더 표시
                     </p>
                   </div>
                 </div>

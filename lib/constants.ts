@@ -193,3 +193,140 @@ export const API_CONFIG = {
   retryDelay: 1000,
   timeout: 30000,
 } as const;
+
+// ============================================
+// 분석 이벤트 (Google Analytics 4)
+// ============================================
+/**
+ * GA4 분석 이벤트 정의
+ *
+ * 명명 규칙:
+ * - action: 동사 (send, complete, start, click, show)
+ * - category: 기능 영역 (chat, mood_checkin, exercise, crisis)
+ *
+ * 개인정보 보호 원칙:
+ * - 메시지 내용 전송 금지
+ * - 감정 원시값 전송 금지 (분류만 허용)
+ */
+export const ANALYTICS_EVENTS = {
+  // 채팅 이벤트
+  CHAT_MESSAGE_SENT: {
+    action: 'send_message',
+    category: 'chat',
+    description: '채팅 메시지 전송 (빈도만, 내용 제외)',
+  },
+
+  // 기분 체크인 이벤트
+  MOOD_CHECKIN_COMPLETED: {
+    action: 'complete',
+    category: 'mood_checkin',
+    description: '기분 체크인 완료',
+  },
+  MOOD_CHECKIN_STARTED: {
+    action: 'start',
+    category: 'mood_checkin',
+    description: '기분 체크인 시작',
+  },
+
+  // 운동/활동 이벤트
+  EXERCISE_STARTED: {
+    action: 'start',
+    category: 'exercise',
+    description: '호흡/명상 등 활동 시작',
+  },
+  EXERCISE_COMPLETED: {
+    action: 'complete',
+    category: 'exercise',
+    description: '호흡/명상 등 활동 완료',
+  },
+  EXERCISE_PAUSED: {
+    action: 'pause',
+    category: 'exercise',
+    description: '활동 일시정지',
+  },
+  EXERCISE_RESUMED: {
+    action: 'resume',
+    category: 'exercise',
+    description: '활동 재개',
+  },
+
+  // 위기 관련 이벤트 (중요 안전 메트릭)
+  CRISIS_HOTLINE_SHOWN: {
+    action: 'show',
+    category: 'crisis',
+    description: '위기 핫라인 정보 표시 (중요 안전 메트릭)',
+  },
+  CRISIS_HOTLINE_CLICKED: {
+    action: 'click',
+    category: 'crisis',
+    description: '위기 핫라인 클릭',
+  },
+  CRISIS_ALERT_SHOWN: {
+    action: 'show',
+    category: 'crisis_alert',
+    description: '위기 감지 알림 표시',
+  },
+
+  // 기능 사용 이벤트
+  FEATURE_DARK_MODE_TOGGLED: {
+    action: 'toggle',
+    category: 'feature',
+    description: '다크 모드 토글',
+  },
+  FEATURE_NOTIFICATIONS_TOGGLED: {
+    action: 'toggle',
+    category: 'feature',
+    description: '알림 설정 토글',
+  },
+
+  // 네비게이션 이벤트
+  NAV_SIDEBAR_OPENED: {
+    action: 'open',
+    category: 'navigation',
+    description: '사이드바 열기',
+  },
+  NAV_TAB_CLICKED: {
+    action: 'click',
+    category: 'navigation',
+    description: '하단 탭 클릭',
+  },
+
+  // 에러 이벤트
+  ERROR_API: {
+    action: 'error',
+    category: 'api',
+    description: 'API 호출 에러',
+  },
+  ERROR_NETWORK: {
+    action: 'error',
+    category: 'network',
+    description: '네트워크 에러',
+  },
+
+  // PWA 이벤트
+  PWA_INSTALL_PROMPTED: {
+    action: 'show',
+    category: 'pwa',
+    description: 'PWA 설치 프롬프트 표시',
+  },
+  PWA_INSTALLED: {
+    action: 'install',
+    category: 'pwa',
+    description: 'PWA 설치 완료',
+  },
+  PWA_INSTALL_DISMISSED: {
+    action: 'dismiss',
+    category: 'pwa',
+    description: 'PWA 설치 프롬프트 닫기',
+  },
+} as const;
+
+// 이벤트 타입
+export type AnalyticsEvent = keyof typeof ANALYTICS_EVENTS;
+
+// 이벤트 데이터 타입
+export type AnalyticsEventData = {
+  action: string;
+  category: string;
+  description: string;
+};

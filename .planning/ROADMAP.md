@@ -6,7 +6,7 @@
 
 - ✅ **v1.2 Production Ready** — Phases 1-12 (shipped 2026-01-18) → [Archive](milestones/v1.2-ROADMAP.md)
 - ✅ **v2.0 Production Complete** — Phases 13-16 (shipped 2026-01-18) → [Archive](milestones/v2.0-ROADMAP.md)
-- 🚧 **v2.1 Analytics & Engagement** — Phases 17-21 (in progress)
+- ✅ **v2.1 Analytics & Engagement** — Phases 17-21 (completed 2026-01-18)
 
 ## Completed Milestones
 
@@ -92,63 +92,67 @@ Plans:
 
 ---
 
-### 🚧 v2.1 Analytics & Engagement (In Progress)
+### ✅ v2.1 Analytics & Engagement (COMPLETE)
 
 **Milestone Goal:** 분석, 모니터링, 사용자 참여 기능 강화
 
-#### Phase 17: analytics-setup
+#### Phase 17: analytics-setup ✅
 
 **Goal**: Google Analytics 4 연동 및 이벤트 트래킹
-**Depends on**: v2.0 milestone complete
-**Research**: Likely (GA4 API, gtag.js)
-**Research topics**: GA4 설정, Next.js 통합 패턴, 이벤트 스키마 설계
-**Plans**: TBD
 
 Plans:
-- [ ] 17-01: TBD (run /gsd:plan-phase 17 to break down)
+- [x] 17-01: GA4 analytics utility, AnalyticsProvider, ANALYTICS_EVENTS 상수
 
-#### Phase 18: web-vitals
+**Deliverables:**
+- `lib/analytics.ts` - GA4 유틸리티 (pageview, event, 헬퍼 함수)
+- `components/providers/AnalyticsProvider.tsx` - GA4 스크립트 로더
+- `lib/constants.ts` - 22개 ANALYTICS_EVENTS 상수
 
-**Goal**: Web Vitals 수집 및 성능 대시보드
-**Depends on**: Phase 17
-**Research**: Likely (web-vitals library, Vercel Analytics)
-**Research topics**: Core Web Vitals 메트릭, 리포팅 패턴
-**Plans**: TBD
+#### Phase 18: web-vitals ✅
+
+**Goal**: Web Vitals 수집 및 GA4 리포팅
 
 Plans:
-- [ ] 18-01: TBD
+- [x] 18-01: web-vitals 라이브러리, WebVitalsReporter 컴포넌트
 
-#### Phase 19: visual-testing
+**Deliverables:**
+- `lib/webVitals.ts` - Core Web Vitals 수집 (LCP, INP, CLS, FCP, TTFB)
+- `components/providers/WebVitalsReporter.tsx` - 자동 메트릭 리포팅
+
+#### Phase 19: visual-testing ✅
 
 **Goal**: Visual regression 테스트 자동화
-**Depends on**: Phase 18
-**Research**: Likely (Percy, Chromatic, Playwright visual)
-**Research topics**: Visual testing 도구 비교, CI 통합
-**Plans**: TBD
 
 Plans:
-- [ ] 19-01: TBD
+- [x] 19-01: Playwright visual config, visual.spec.ts (17개 테스트)
 
-#### Phase 20: push-backend
+**Deliverables:**
+- `playwright.config.ts` - Visual 테스트 설정 추가
+- `e2e/visual.spec.ts` - 17개 시각적 회귀 테스트
+- npm scripts: `test:visual`, `test:visual:update`
 
-**Goal**: FCM/APNs 서버 연동 및 토큰 관리
-**Depends on**: Phase 19
-**Research**: Likely (Firebase Cloud Messaging, APNs)
-**Research topics**: FCM 설정, 토큰 저장, 백엔드 API
-**Plans**: TBD
+#### Phase 20: push-backend ✅
+
+**Goal**: FCM 클라이언트 연동 및 토큰 관리
 
 Plans:
-- [ ] 20-01: TBD
+- [x] 20-01: Firebase SDK, pushNotifications.ts, usePushNotifications hook
 
-#### Phase 21: push-frontend
+**Deliverables:**
+- `lib/pushNotifications.ts` - FCM 초기화, 토큰 관리
+- `hooks/usePushNotifications.ts` - React hook
+
+#### Phase 21: push-frontend ✅
 
 **Goal**: Service Worker 푸시 핸들링 및 UI
-**Depends on**: Phase 20
-**Research**: Unlikely (기존 Service Worker 확장)
-**Plans**: TBD
 
 Plans:
-- [ ] 21-01: TBD
+- [x] 21-01: firebase-messaging-sw.js, PushNotificationButton, 설정 페이지 통합
+
+**Deliverables:**
+- `public/firebase-messaging-sw.js` - 백그라운드 푸시 핸들러
+- `components/common/PushNotificationButton.tsx` - 알림 권한 버튼
+- `app/settings/page.tsx` - 푸시 알림 UI 통합
 
 ---
 
@@ -161,8 +165,8 @@ Plans:
 | 14. pwa-completion | v2.0 | 1/1 | ✅ Complete | 2026-01-18 |
 | 15. production-monitoring | v2.0 | 1/1 | ✅ Complete | 2026-01-18 |
 | 16. e2e-testing | v2.0 | 1/1 | ✅ Complete | 2026-01-18 |
-| 17. analytics-setup | v2.1 | 0/? | Not started | - |
-| 18. web-vitals | v2.1 | 0/? | Not started | - |
-| 19. visual-testing | v2.1 | 0/? | Not started | - |
-| 20. push-backend | v2.1 | 0/? | Not started | - |
-| 21. push-frontend | v2.1 | 0/? | Not started | - |
+| 17. analytics-setup | v2.1 | 1/1 | ✅ Complete | 2026-01-18 |
+| 18. web-vitals | v2.1 | 1/1 | ✅ Complete | 2026-01-18 |
+| 19. visual-testing | v2.1 | 1/1 | ✅ Complete | 2026-01-18 |
+| 20. push-backend | v2.1 | 1/1 | ✅ Complete | 2026-01-18 |
+| 21. push-frontend | v2.1 | 1/1 | ✅ Complete | 2026-01-18 |

@@ -8,6 +8,8 @@ import { OfflineAlert } from '@/components/common/OfflineAlert';
 import { ToastProvider } from '@/components/common/Toast';
 import { PageLoading } from '@/components/common/PageLoading';
 import { InstallPrompt } from '@/components/common/InstallPrompt';
+import { AnalyticsProvider } from '@/components/providers/AnalyticsProvider';
+import { WebVitalsReporter } from '@/components/providers/WebVitalsReporter';
 
 interface ProvidersProps {
   children: ReactNode;
@@ -21,6 +23,8 @@ interface ProvidersProps {
  * - OfflineAlert: 오프라인 상태 알림
  * - PageLoading: 페이지 전환 로딩 표시
  * - InstallPrompt: PWA 설치 프롬프트
+ * - AnalyticsProvider: GA4 분석 트래킹
+ * - WebVitalsReporter: Core Web Vitals 성능 모니터링
  */
 export function Providers({ children }: ProvidersProps) {
   return (
@@ -30,6 +34,8 @@ export function Providers({ children }: ProvidersProps) {
           <ThemeProvider>
             <Suspense fallback={null}>
               <PageLoading />
+              <AnalyticsProvider />
+              <WebVitalsReporter />
             </Suspense>
             <OfflineAlert />
             {children}

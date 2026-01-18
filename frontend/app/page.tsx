@@ -1,57 +1,82 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send } from 'lucide-react';
-import { sendMessage, ChatResponse } from '../lib/api';
-import { ChatMessage } from '../components/ChatMessage';
-import { Sidebar } from '../components/Sidebar';
+import { sendMessage, ChatResponseFormatted } from '@/lib/api';
+import { ChatMessage } from '@/components/ChatMessage';
+import { Sidebar } from '@/components/Sidebar';
+import { Message, EmotionData } from '@/types';
+
+// Unique ID generator
+const generateId = () => `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
 export default function Home() {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [lastResponse, setLastResponse] = useState<ChatResponse | null>(null);
-  const [userId] = useState(`user_${Math.random().toString(36).substr(2, 9)}`);
+  const [lastEmotion, setLastEmotion] = useState<EmotionData | null>(null);
+  const [techniques, setTechniques] = useState<string[]>([]);
+  // Lazy initialization for userId
+  const [userId] = useState(() => `user_${Math.random().toString(36).substr(2, 9)}`);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
-  const handleSend = async (e?: React.FormEvent) => {
+  const handleSend = useCallback(async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!input.trim() || isLoading) return;
 
     const userMsg = input;
+    const userMsgId = generateId();
+
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+    setMessages(prev => [...prev, {
+      id: userMsgId,
+      role: 'user',
+      content: userMsg,
+      timestamp: Date.now()
+    }]);
     setIsLoading(true);
 
     try {
       const data = await sendMessage(userMsg, userId, sessionId);
-      
+
       setSessionId(data.session_id);
-      setLastResponse(data);
-      
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
+      setLastEmotion(data.emotion);
+      setTechniques(data.suggested_techniques);
+
+      setMessages(prev => [...prev, {
+        id: generateId(),
+        role: 'assistant',
         content: data.response,
         emotion: data.emotion.label,
-        isCrisis: data.is_crisis
+        isCrisis: data.is_crisis,
+        timestamp: Date.now()
       }]);
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { role: 'assistant', content: "죄송합니다. 오류가 발생했습니다." }]);
+      setMessages(prev => [...prev, {
+        id: generateId(),
+        role: 'assistant',
+        content: '죄송합니다. 오류가 발생했습니다.',
+        timestamp: Date.now()
+      }]);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [input, isLoading, userId, sessionId]);
+
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  }, []);
 
   return (
     <div className="flex h-screen bg-slate-50">
@@ -60,10 +85,13 @@ export default function Home() {
         {/* Header */}
         <header className="bg-white border-b border-gray-100 p-4 flex items-center justify-between">
           <h1 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-            🧠 MindBridge AI <span className="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full">Phase 3</span>
+            MindBridge AI
+            <span className="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full">
+              Phase 3
+            </span>
           </h1>
           <div className="text-sm text-gray-500">
-            Session: {sessionId ? sessionId.slice(0,8) : 'New'}
+            Session: {sessionId ? sessionId.slice(0, 8) : 'New'}
           </div>
         </header>
 
@@ -75,24 +103,24 @@ export default function Home() {
               <p className="text-sm mt-2">편안하게 이야기를 들려주세요.</p>
             </div>
           )}
-          {messages.map((msg, idx) => (
-            <ChatMessage 
-              key={idx} 
-              role={msg.role} 
-              content={msg.content} 
+          {messages.map((msg) => (
+            <ChatMessage
+              key={msg.id}
+              role={msg.role}
+              content={msg.content}
               emotion={msg.emotion}
               isCrisis={msg.isCrisis}
             />
           ))}
           {isLoading && (
             <div className="flex justify-start mb-4">
-               <div className="bg-white p-4 rounded-2xl rounded-tl-none border border-gray-100">
-                 <div className="flex space-x-2">
-                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-75"></div>
-                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-150"></div>
-                 </div>
-               </div>
+              <div className="bg-white p-4 rounded-2xl rounded-tl-none border border-gray-100">
+                <div className="flex space-x-2">
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:75ms]" />
+                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
+                </div>
+              </div>
             </div>
           )}
           <div ref={messagesEndRef} />
@@ -104,13 +132,13 @@ export default function Home() {
             <input
               type="text"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleInputChange}
               placeholder="여기에 이야기를 입력하세요..."
               className="flex-1 p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all"
               disabled={isLoading}
             />
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               disabled={isLoading || !input.trim()}
               className="bg-brand-600 text-white p-3 rounded-xl hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
@@ -121,10 +149,7 @@ export default function Home() {
       </div>
 
       {/* Analysis Sidebar */}
-      <Sidebar 
-        currentEmotion={lastResponse?.emotion} 
-        techniques={lastResponse?.suggested_techniques || []} 
-      />
+      <Sidebar currentEmotion={lastEmotion} techniques={techniques} />
     </div>
   );
 }

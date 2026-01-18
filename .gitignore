@@ -136,3 +136,6 @@ node_modules/
 # Next.js
 .next/
 out/
+
+# Exception: frontend lib folder (not Python lib)
+!frontend/lib/

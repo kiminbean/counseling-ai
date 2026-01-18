@@ -5,7 +5,7 @@
 ## Milestones
 
 - ✅ **v1.2 Production Ready** — Phases 1-12 (shipped 2026-01-18) → [Archive](milestones/v1.2-ROADMAP.md)
-- 📋 **v2.0 Extended** — Phases 13+ (planned)
+- 🚧 **v2.0 Production Complete** — Phases 13-16 (in progress)
 
 ## Completed Milestones
 
@@ -43,50 +43,81 @@
 
 ---
 
-## 📋 v2.0 Extended (Planned)
+## 🚧 v2.0 Production Complete (In Progress)
 
-### Phase 13: 추가 페이지 구현
+**Milestone Goal:** 사용자 경험 완성 및 운영 준비 - 미구현 페이지 완성, PWA 아이콘, 프로덕션 모니터링, E2E 테스트
 
-**목표**: 누락된 페이지 구현
+### Phase 13: pages-implementation
 
-**Tasks**:
-- /settings 페이지
-- /privacy 페이지
-- /help 페이지
+**Goal**: 미구현 페이지 완성 (/settings, /privacy, /help)
+**Depends on**: v1.2 milestone complete
+**Research**: Unlikely (internal patterns, reusing existing components)
+**Plans**: TBD
 
-### Phase 14: PWA 완성
+Tasks:
+- /settings 페이지: 알림 설정, 테마 설정(다크모드), 개인정보 관리(데이터 삭제/내보내기), PWA 설치 안내
+- /privacy 페이지: 개인정보 처리방침
+- /help 페이지: 사용 가이드, FAQ, 문의하기
 
-**목표**: PWA 아이콘 및 최적화
+Plans:
+- [ ] 13-01: TBD (run /gsd:plan-phase 13 to break down)
 
-**Tasks**:
-- PWA 아이콘 생성 (72x72 ~ 512x512)
-- 앱 스토어 배포 준비
+### Phase 14: pwa-completion
 
-### Phase 15: 프로덕션 모니터링
+**Goal**: PWA 아이콘 생성 및 앱 스토어 배포 준비
+**Depends on**: Phase 13
+**Research**: Unlikely (asset generation only)
+**Plans**: TBD
 
-**목표**: 실제 운영 환경 모니터링
+Tasks:
+- 72x72 ~ 512x512 아이콘 생성
+- Apple Touch Icon
+- 앱 스토어 메타데이터 준비
 
-**Tasks**:
-- Sentry 연동
-- Analytics 연동
-- 성능 모니터링 대시보드
+Plans:
+- [ ] 14-01: TBD
 
-### Phase 16: E2E 테스트
+### Phase 15: production-monitoring
 
-**목표**: 엔드투엔드 테스트 자동화
+**Goal**: Sentry 연동, Analytics, 성능 대시보드
+**Depends on**: Phase 14
+**Research**: Likely (Sentry/Analytics integration)
+**Research topics**: @sentry/nextjs 설정, Google Analytics 4 연동, Web Vitals 대시보드 구현
+**Plans**: TBD
 
-**Tasks**:
+Tasks:
+- Sentry 에러 트래킹 활성화 (npm install @sentry/nextjs)
+- Google Analytics 연동
+- Web Vitals 대시보드
+
+Plans:
+- [ ] 15-01: TBD
+
+### Phase 16: e2e-testing
+
+**Goal**: Playwright로 핵심 시나리오 자동화
+**Depends on**: Phase 15
+**Research**: Likely (Playwright setup with Next.js)
+**Research topics**: Playwright 설정, Next.js 테스트 패턴, CI/CD 연동
+**Plans**: TBD
+
+Tasks:
 - Playwright 설정
-- 핵심 시나리오 테스트
-- CI/CD 연동
+- 채팅 플로우 테스트
+- 인증 플로우 테스트
+- 오프라인 동작 테스트
+
+Plans:
+- [ ] 16-01: TBD
 
 ---
 
 ## Progress
 
-| Phase | Milestone | Status | Completed |
-|-------|-----------|--------|-----------|
-| 1-7 | v1.2 | ✅ Complete | 2026-01-18 |
-| 8-10 | v1.2 | ✅ Complete | 2026-01-18 |
-| 11-12 | v1.2 | ✅ Complete | 2026-01-18 |
-| 13-16 | v2.0 | 📋 Planned | - |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1-12 | v1.2 | All | ✅ Complete | 2026-01-18 |
+| 13. pages-implementation | v2.0 | 0/? | Not started | - |
+| 14. pwa-completion | v2.0 | 0/? | Not started | - |
+| 15. production-monitoring | v2.0 | 0/? | Not started | - |
+| 16. e2e-testing | v2.0 | 0/? | Not started | - |

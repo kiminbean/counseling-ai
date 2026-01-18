@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { User, Settings, Shield, HelpCircle, LogOut, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { AppShell } from '@/components/layout/AppShell';
@@ -13,7 +14,7 @@ export default function ProfilePage() {
       icon: Settings,
       label: '설정',
       description: '알림, 언어, 테마',
-      comingSoon: true,
+      href: '/settings',
     },
     {
       icon: Shield,
@@ -54,30 +55,48 @@ export default function ProfilePage() {
 
         {/* Menu */}
         <div className="p-4 space-y-2">
-          {menuItems.map((item) => (
-            <div
-              key={item.label}
-              className={`w-full flex items-center gap-4 p-4 bg-gray-50 rounded-xl text-left ${
-                item.comingSoon ? 'opacity-60 cursor-not-allowed' : 'hover:bg-gray-100 cursor-pointer'
-              }`}
-            >
-              <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center">
-                <item.icon size={20} className="text-brand-600" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <p className="font-medium text-gray-800">{item.label}</p>
-                  {item.comingSoon && (
-                    <span className="text-xs px-2 py-0.5 bg-gray-200 text-gray-500 rounded-full">
-                      준비 중
-                    </span>
-                  )}
+          {menuItems.map((item) => {
+            const content = (
+              <>
+                <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center">
+                  <item.icon size={20} className="text-brand-600" />
                 </div>
-                <p className="text-sm text-gray-500">{item.description}</p>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium text-gray-800">{item.label}</p>
+                    {item.comingSoon && (
+                      <span className="text-xs px-2 py-0.5 bg-gray-200 text-gray-500 rounded-full">
+                        준비 중
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-500">{item.description}</p>
+                </div>
+                <ChevronRight size={20} className="text-gray-400" />
+              </>
+            );
+
+            if (item.href) {
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="w-full flex items-center gap-4 p-4 bg-gray-50 rounded-xl text-left hover:bg-gray-100 cursor-pointer"
+                >
+                  {content}
+                </Link>
+              );
+            }
+
+            return (
+              <div
+                key={item.label}
+                className="w-full flex items-center gap-4 p-4 bg-gray-50 rounded-xl text-left opacity-60 cursor-not-allowed"
+              >
+                {content}
               </div>
-              <ChevronRight size={20} className="text-gray-400" />
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Version Info */}
